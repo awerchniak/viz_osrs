@@ -13,13 +13,12 @@ class App extends React.Component {
 
   refreshData = () => {
     var url = new URL(
-      "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda?sql=SELECT+timestamp%2CSmithing%2CMining+from+skills.experience+ORDER+BY+timestamp+DESC+LIMIT+10"
+      "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
     );
-    // var searchParams = new URLSearchParams(url.search);
-    // searchParams.set(
-    //   "sql",
-    //   "SELECT timestamp,Smithing,Mining from skills.experience ORDER BY timestamp DESC LIMIT 10"
-    // );
+    url.searchParams.append(
+      "sql",
+      "SELECT timestamp,Smithing,Mining from skills.experience ORDER BY timestamp DESC LIMIT 10"
+    );
     fetch(url)
       .then((res) => res.json())
       .then((_data) => {
