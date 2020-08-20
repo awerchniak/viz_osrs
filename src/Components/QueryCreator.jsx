@@ -1,12 +1,16 @@
 import React from "react";
 import "../App.css";
 import { render } from "react-dom";
+import QuerySelector from "./QuerySelector";
 
 class QueryCreator extends React.Component {
   constructor() {
     super();
     this.state = {
-      data: undefined,
+      dataBaseQuery: undefined,
+      player: undefined,
+      category: undefined,
+      skills: [],
     };
   }
 
@@ -22,7 +26,7 @@ class QueryCreator extends React.Component {
     try {
       const res = await fetch(url);
       const data = await res.json();
-      this.setState({ data: data }, () => {
+      this.setState({ dataBaseQuery: data }, () => {
         console.log("logging data");
         console.log(data);
       });
@@ -31,15 +35,38 @@ class QueryCreator extends React.Component {
     }
   };
 
+  // parseData = () => {
+  //   // TODO
+  //   const someNewData = undefined;
+  //   this.setState({ data: someNewData });
+  // };
+
+  updatePlayer = (player) => {
+    this.setState({ player: player });
+  };
+
+  updateCategory = (category) => {
+    this.setState({ category: category });
+  };
+
+  updateSkills = (skills) => {
+    this.setState({ skills: skills });
+  };
+
   componentDidMount() {
     this.refreshData();
   }
 
   render() {
-    const data = JSON.stringify(this.state.data);
+    // const data = this.parseData();
     return (
       <div>
-        <p>{data}</p>
+        <QuerySelector
+          updatePlayer={this.updatePlayer}
+          updateCategory={this.updateCategory}
+          updateSkills={this.updateSkills}
+        ></QuerySelector>
+        {/* <GraphContainer>{data}</GraphContainer> */}
         <button onClick={this.refreshData}>Refresh</button>
       </div>
     );

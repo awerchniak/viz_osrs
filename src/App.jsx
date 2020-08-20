@@ -11,7 +11,7 @@ class App extends React.Component {
         <QueryCreator></QueryCreator>
         <a
           className="App-link"
-          href="https://https://github.com/awerchniak/viz_osrs.org"
+          href="https://github.com/awerchniak/viz_osrs"
           target="_blank"
           rel="noopener noreferrer"
         >
