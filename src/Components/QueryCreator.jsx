@@ -31,7 +31,6 @@ class QueryCreator extends React.Component {
       "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
     );
     const query = this.getQuery();
-    console.log(query);
     url.searchParams.append("sql", this.getQuery());
 
     try {
@@ -74,6 +73,10 @@ class QueryCreator extends React.Component {
     this.setState({ category: category.value }, () => this.fetchData());
   };
 
+  /**
+   *
+   * We receive skills as value, label pairs
+   */
   updateSkills = (skills) => {
     const updatedSkills = [];
     if (skills) {
@@ -91,6 +94,10 @@ class QueryCreator extends React.Component {
   }
 
   componentDidUpdate() {
+    /**
+     * N.B. (trdav):
+     * Never remove this queryResult check, or we will get an infinite loop
+     */
     if (this.state.queryResult === undefined) {
       this.fetchData();
     }
