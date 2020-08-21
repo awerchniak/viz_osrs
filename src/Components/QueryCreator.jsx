@@ -13,6 +13,14 @@ class QueryCreator extends React.Component {
       category: "experience",
       skills: ["Mining"],
     };
+
+    // 0.5 hours, that is
+    this.pollingInterval = 0.5;
+
+    this.defaultViewInterval = 24 * 20;
+    this.defaultDisplayedDataPoints = 1000;
+
+    this.numberToQuery = this.defaultViewInterval / this.pollingInterval;
   }
 
   fetchData = async () => {
@@ -29,23 +37,41 @@ class QueryCreator extends React.Component {
     try {
       const res = await fetch(url);
       const data = await res.json();
-      console.log(data);
-      this.setState({ queryResult: data });
+      const smoothedData = this.smooth(data);
+      this.setState({ queryResult: smoothedData });
     } catch (error) {
       throw error;
     }
   };
 
+  // not a real smooth, more of a thin
+  smooth = (data) => {
+    if (!Array.isArray(data)) {
+      // not our problem
+      return data;
+    }
+
+    const smoothedData = [];
+    const length = data.length;
+    const delta = Math.floor(length / this.defaultDisplayedDataPoints);
+    if (delta === 0) return data;
+    for (let i = 0; i < length; i = i + delta) {
+      smoothedData.push(data[i]);
+    }
+
+    return smoothedData;
+  };
+
   getQuery = () => {
-    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' ORDER BY timestamp ASC LIMIT 500`;
+    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' ORDER BY timestamp ASC LIMIT ${this.numberToQuery}`;
   };
 
   updatePlayer = (player) => {
-    this.setState({ player: player.value }, this.fetchData);
+    this.setState({ player: player.value }, () => this.fetchData());
   };
 
   updateCategory = (category) => {
-    this.setState({ category: category.value }, this.fetchData);
+    this.setState({ category: category.value }, () => this.fetchData());
   };
 
   updateSkills = (skills) => {
@@ -57,7 +83,7 @@ class QueryCreator extends React.Component {
         }
       });
     }
-    this.setState({ skills: updatedSkills }, this.fetchData);
+    this.setState({ skills: updatedSkills }, () => this.fetchData());
   };
 
   componentDidMount() {

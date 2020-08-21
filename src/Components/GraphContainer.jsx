@@ -162,6 +162,7 @@ class GraphContainer extends React.Component {
           dataKey={skill}
           stroke="#8884d8"
           animationDuration={300}
+          dot={false}
         />
       );
     });
