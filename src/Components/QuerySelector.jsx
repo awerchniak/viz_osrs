@@ -46,6 +46,10 @@ class QuerySelector extends React.Component {
       { value: "Hunter", label: "Hunter" },
       { value: "Construction", label: "Construction" },
     ];
+
+    this.defaultPlayer = "ElderPlinius";
+    this.defaultCategeory = "experience";
+    this.defaultSkills = ["Magic"];
   }
 
   updatePlayer = (player) => {
@@ -67,22 +71,22 @@ class QuerySelector extends React.Component {
     return (
       <div>
         <Select
-          defaultValue={this.state.player}
-          defaultInputValue={this.state.player}
+          //defaultValue={this.defaultPlayer}
+          //defaultInputValue={this.defaultPlayer}
           value={this.state.player}
           onChange={this.updatePlayer}
           options={this.playerOptions}
         />
         <Select
-          defaultValue={this.state.category}
-          defaultInputValue={this.state.category}
+          //defaultValue={this.defaultCategeory}
+          //defaultInputValue={this.defaultCategeory}
           value={this.state.category}
           onChange={this.updateCategory}
           options={this.categoryOptions}
         />
         <Select
-          defaultValue={this.state.skills}
-          defaultInputValue={this.state.skills}
+          //defaultValue={this.defaultSkills}
+          //defaultInputValue={this.defaultSkills}
           value={this.state.skills}
           onChange={this.updateSkills}
           options={this.skillsOptions}

@@ -1,64 +1,66 @@
 import React from "react";
 import "../App.css";
 import { render } from "react-dom";
+import GraphContainer from "./GraphContainer";
 import QuerySelector from "./QuerySelector";
 
 class QueryCreator extends React.Component {
   constructor() {
     super();
     this.state = {
-      dataBaseQuery: undefined,
-      player: undefined,
-      category: undefined,
-      skills: [],
+      queryResult: undefined,
+      player: "ElderPlinius",
+      category: "experience",
+      skills: ["Magic"],
     };
   }
 
-  refreshData = async () => {
+  fetchData = async () => {
     var url = new URL(
       "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
     );
-    url.searchParams.append(
-      "sql",
-      "SELECT timestamp,Smithing,Mining from skills.experience ORDER BY timestamp DESC LIMIT 10"
-    );
+    const query = this.getQuery();
+    console.log(query);
+    url.searchParams.append("sql", this.getQuery());
 
     try {
       const res = await fetch(url);
       const data = await res.json();
-      this.setState({ dataBaseQuery: data }, () => {
-        console.log("logging data");
-        console.log(data);
-      });
+      console.log(data);
+      this.setState({ queryResult: data });
     } catch (error) {
       throw error;
     }
   };
 
-  // parseData = () => {
-  //   // TODO
-  //   const someNewData = undefined;
-  //   this.setState({ data: someNewData });
-  // };
+  getQuery = () => {
+    console.log(this.state.skills);
+    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' ORDER BY timestamp DESC LIMIT 1000`;
+  };
 
   updatePlayer = (player) => {
-    this.setState({ player: player });
+    this.setState({ player: player }, this.fetchData);
   };
 
   updateCategory = (category) => {
-    this.setState({ category: category });
+    this.setState({ category: category }, this.fetchData);
   };
 
   updateSkills = (skills) => {
-    this.setState({ skills: skills });
+    this.setState({ skills: skills }, this.fetchData);
   };
 
   componentDidMount() {
-    this.refreshData();
+    this.fetchData();
+  }
+
+  componentDidUpdate() {
+    if (this.state.queryResult === undefined) {
+      this.fetchData();
+    }
   }
 
   render() {
-    // const data = this.parseData();
     return (
       <div>
         <QuerySelector
@@ -66,8 +68,11 @@ class QueryCreator extends React.Component {
           updateCategory={this.updateCategory}
           updateSkills={this.updateSkills}
         ></QuerySelector>
-        {/* <GraphContainer>{data}</GraphContainer> */}
-        <button onClick={this.refreshData}>Refresh</button>
+        <button onClick={this.fetchData}>Refresh</button>
+        <GraphContainer
+          skills={this.state.skills}
+          data={this.state.queryResult}
+        ></GraphContainer>
       </div>
     );
   }

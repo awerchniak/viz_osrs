@@ -1,7 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { render } from "react-dom";
 import QueryCreator from "./Components/QueryCreator";
 
 class App extends React.Component {
