@@ -33,8 +33,8 @@ class GraphContainer extends React.Component {
 
     switch (this.props.category) {
       case "experience":
-        bottom = 10000;
-        top = 1000000;
+        bottom = 1000;
+        top = 10000;
         break;
       case "level":
         bottom = 1;
@@ -63,6 +63,7 @@ class GraphContainer extends React.Component {
     bottom = bottom - rangeOffset;
     top = top + rangeOffset;
 
+    this.setState({ bottom, top });
     return [bottom, top];
   };
 
@@ -112,9 +113,6 @@ class GraphContainer extends React.Component {
 
   zoomOut() {
     let { data } = this.state;
-    if (data === undefined) {
-      data = [{ timeStamp: 0, Magic: 0 }];
-    }
 
     this.setState(() => ({
       data: data.slice(),
@@ -128,19 +126,19 @@ class GraphContainer extends React.Component {
   }
 
   formatData = () => {
-    if (this.props.data !== undefined && Array.isArray(this.props.data)) {
+    if (
+      this.props.data &&
+      this.props.skills &&
+      Array.isArray(this.props.data)
+    ) {
       const newArray = [];
       this.props.data.forEach((dataPoint) => {
         const processedDataPoint = {};
         processedDataPoint.timeStamp = dataPoint[0];
         let index = 1;
         this.props.skills.forEach((skill) => {
-          console.log("logging skill");
-          console.log(skill);
           processedDataPoint[skill] = dataPoint[index];
-          console.log("logging processedDataPoint");
-          console.log(processedDataPoint);
-          index += 1;
+          index = index + 1;
         });
         newArray.push(processedDataPoint);
       });
@@ -152,7 +150,6 @@ class GraphContainer extends React.Component {
 
   getLines = () => {
     const lines = [];
-    let yAxisId = 1;
     if (this.props.skills === undefined) {
       return undefined;
     }
@@ -160,9 +157,9 @@ class GraphContainer extends React.Component {
     this.props.skills.forEach((skill) => {
       lines.push(
         <Line
-          yAxisId={yAxisId}
+          yAxisId="1"
           type="natural"
-          dataKey="Magic"
+          dataKey={skill}
           stroke="#8884d8"
           animationDuration={300}
         />
@@ -178,11 +175,15 @@ class GraphContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!deepEqual(prevProps.data, this.props.data)) {
+    if (
+      !deepEqual(prevProps.data, this.props.data) ||
+      !deepEqual(prevProps.user, this.props.user) ||
+      !deepEqual(prevProps.category, this.props.category)
+    ) {
       const formattedDataObject = this.formatData();
-      console.log("logging formattedDataObject");
-      console.log(formattedDataObject);
-      this.setState({ data: formattedDataObject });
+      this.setState({ data: formattedDataObject }, () => {
+        this.getAxisYDomain();
+      });
     }
   }
 
@@ -228,6 +229,14 @@ class GraphContainer extends React.Component {
             yAxisId="1"
           />
           <Tooltip />
+          {/* <Line
+            yAxisId="1"
+            type="monotone"
+            dataKey="Mining"
+            stroke="#8884d8"
+            animationDuration={300}
+            activeDot={{ r: 8 }}
+          />
           <Line
             yAxisId="1"
             type="monotone"
@@ -235,7 +244,8 @@ class GraphContainer extends React.Component {
             stroke="#8884d8"
             animationDuration={300}
             activeDot={{ r: 8 }}
-          />
+          /> */}
+          {this.getLines()}
 
           {refAreaLeft && refAreaRight ? (
             <ReferenceArea

@@ -11,11 +11,14 @@ class QueryCreator extends React.Component {
       queryResult: undefined,
       player: "ElderPlinius",
       category: "experience",
-      skills: ["Magic"],
+      skills: ["Mining"],
     };
   }
 
   fetchData = async () => {
+    if (!this.state.skills || !this.state.player || !this.state.category) {
+      return undefined;
+    }
     var url = new URL(
       "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
     );
@@ -34,20 +37,27 @@ class QueryCreator extends React.Component {
   };
 
   getQuery = () => {
-    console.log(this.state.skills);
     return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' ORDER BY timestamp ASC LIMIT 500`;
   };
 
   updatePlayer = (player) => {
-    this.setState({ player: player }, this.fetchData);
+    this.setState({ player: player.value }, this.fetchData);
   };
 
   updateCategory = (category) => {
-    this.setState({ category: category }, this.fetchData);
+    this.setState({ category: category.value }, this.fetchData);
   };
 
   updateSkills = (skills) => {
-    this.setState({ skills: skills }, this.fetchData);
+    const updatedSkills = [];
+    if (skills) {
+      skills.forEach((skill) => {
+        if (skill.label !== undefined) {
+          updatedSkills.push(skill.value);
+        }
+      });
+    }
+    this.setState({ skills: updatedSkills }, this.fetchData);
   };
 
   componentDidMount() {
@@ -73,6 +83,7 @@ class QueryCreator extends React.Component {
           skills={this.state.skills}
           data={this.state.queryResult}
           category={this.state.category}
+          user={this.state.user}
         ></GraphContainer>
       </div>
     );

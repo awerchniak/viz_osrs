@@ -5,9 +5,9 @@ class QuerySelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: "ElderPlinius",
-      category: "experience",
-      skills: ["Mining"],
+      player: { label: "ElderPlinius", value: "ElderPlinius" },
+      category: { label: "experience", value: "experience" },
+      skills: [{ label: "Mining", value: "Mining" }],
     };
 
     this.playerOptions = [
@@ -46,10 +46,6 @@ class QuerySelector extends React.Component {
       { value: "Hunter", label: "Hunter" },
       { value: "Construction", label: "Construction" },
     ];
-
-    this.defaultPlayer = "ElderPlinius";
-    this.defaultCategeory = "experience";
-    this.defaultSkills = ["Magic"];
   }
 
   updatePlayer = (player) => {
@@ -63,38 +59,31 @@ class QuerySelector extends React.Component {
   };
 
   updateSkills = (skills) => {
-    const updatedSkills = [];
-    if (skills) {
-      skills.forEach((skill) => {
-        if (skill.label !== undefined) {
-          updatedSkills.push(skill.value);
-        }
-      });
-    }
-    this.setState({ skills: updatedSkills });
-    this.props.updateSkills(updatedSkills);
+    this.setState((state) => {
+      return {
+        skills: skills,
+      };
+    });
+    this.props.updateSkills(skills);
   };
 
   render() {
     return (
       <div>
         <Select
-          //defaultValue={this.defaultPlayer}
-          //defaultInputValue={this.defaultPlayer}
+          placeholder="Player"
           value={this.state.player}
           onChange={this.updatePlayer}
           options={this.playerOptions}
         />
         <Select
-          //defaultValue={this.defaultCategeory}
-          //defaultInputValue={this.defaultCategeory}
+          placeholder="Category"
           value={this.state.category}
           onChange={this.updateCategory}
           options={this.categoryOptions}
         />
         <Select
-          //defaultValue={this.defaultSkills}
-          //defaultInputValue={this.defaultSkills}
+          placeholder="Skills"
           value={this.state.skills}
           onChange={this.updateSkills}
           options={this.skillsOptions}
