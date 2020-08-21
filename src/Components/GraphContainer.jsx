@@ -230,22 +230,6 @@ class GraphContainer extends React.Component {
             yAxisId="1"
           />
           <Tooltip />
-          {/* <Line
-            yAxisId="1"
-            type="monotone"
-            dataKey="Mining"
-            stroke="#8884d8"
-            animationDuration={300}
-            activeDot={{ r: 8 }}
-          />
-          <Line
-            yAxisId="1"
-            type="monotone"
-            dataKey="Magic"
-            stroke="#8884d8"
-            animationDuration={300}
-            activeDot={{ r: 8 }}
-          /> */}
           {this.getLines()}
 
           {refAreaLeft && refAreaRight ? (
