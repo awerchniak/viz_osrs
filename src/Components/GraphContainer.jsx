@@ -11,13 +11,13 @@ import {
 } from "recharts";
 
 const initialState = {
-  data: undefined,
+  data: [{ timeStamp: 0, Magic: 0 }],
   left: "dataMin",
   right: "dataMax",
   refAreaLeft: "",
   refAreaRight: "",
-  top: "dataMax+1",
-  bottom: "dataMin-1",
+  top: "dataMax+1000000",
+  bottom: "dataMin-1000000",
   animation: true,
 };
 
@@ -27,22 +27,59 @@ class GraphContainer extends React.Component {
     this.state = initialState;
   }
 
-  getAxisYDomain = (from, to, ref, offset) => {
-    let data;
-    if (this.props.data !== undefined) {
-      data = this.props.data;
-    } else {
-      data = [{ timeStamp: 0, Magic: 0 }];
+  getAxisYDomain = () => {
+    let bottom;
+    let top;
+
+    switch (this.props.category) {
+      case "experience":
+        bottom = 10000;
+        top = 1000000;
+        break;
+      case "level":
+        bottom = 1;
+        top = 99;
+        return [bottom, top];
+      case "rank":
+        bottom = -1;
+        top = 100000;
+        break;
+      default:
+        throw new Error("Unknown category");
     }
-    const refData = data.slice(from - 1, to);
-    let [bottom, top] = [refData[0][ref], refData[0][ref]];
-    refData.forEach((d) => {
-      if (d[ref] > top) top = d[ref];
-      if (d[ref] < bottom) bottom = d[ref];
+
+    this.state.data.forEach((dataPoint) => {
+      let [tempBottom, tempTop] = this.getDataPointMinMax(
+        dataPoint,
+        bottom,
+        top
+      );
+
+      if (tempBottom < bottom) bottom = tempBottom;
+      if (tempTop > top) top = tempTop;
     });
 
-    return [(bottom | 0) - offset, (top | 0) + offset];
+    const rangeOffset = (top - bottom) / 10;
+    bottom = bottom - rangeOffset;
+    top = top + rangeOffset;
+
+    return [bottom, top];
   };
+
+  getDataPointMinMax(dataPoint, currentMin, currentMax) {
+    let min = currentMin;
+    let max = currentMax;
+    let keys = Object.keys(dataPoint);
+    keys.forEach((key) => {
+      if (key !== "timeStamp") {
+        const value = dataPoint[key];
+        if (value < min) min = value;
+        if (value > max) max = value;
+      }
+    });
+
+    return [min, max];
+  }
 
   zoom() {
     let { refAreaLeft, refAreaRight, data } = this.state;
@@ -60,12 +97,7 @@ class GraphContainer extends React.Component {
       [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
 
     // yAxis domain
-    const [bottom, top] = this.getAxisYDomain(
-      refAreaLeft,
-      refAreaRight,
-      "Magic",
-      1
-    );
+    const [bottom, top] = this.getAxisYDomain();
 
     this.setState(() => ({
       refAreaLeft: "",
@@ -79,7 +111,11 @@ class GraphContainer extends React.Component {
   }
 
   zoomOut() {
-    const { data } = this.state;
+    let { data } = this.state;
+    if (data === undefined) {
+      data = [{ timeStamp: 0, Magic: 0 }];
+    }
+
     this.setState(() => ({
       data: data.slice(),
       refAreaLeft: "",
@@ -112,6 +148,28 @@ class GraphContainer extends React.Component {
     }
 
     return undefined;
+  };
+
+  getLines = () => {
+    const lines = [];
+    let yAxisId = 1;
+    if (this.props.skills === undefined) {
+      return undefined;
+    }
+
+    this.props.skills.forEach((skill) => {
+      lines.push(
+        <Line
+          yAxisId={yAxisId}
+          type="natural"
+          dataKey="Magic"
+          stroke="#8884d8"
+          animationDuration={300}
+        />
+      );
+    });
+
+    return lines;
   };
 
   componentDidMount() {
@@ -172,10 +230,11 @@ class GraphContainer extends React.Component {
           <Tooltip />
           <Line
             yAxisId="1"
-            type="natural"
+            type="monotone"
             dataKey="Magic"
             stroke="#8884d8"
             animationDuration={300}
+            activeDot={{ r: 8 }}
           />
 
           {refAreaLeft && refAreaRight ? (

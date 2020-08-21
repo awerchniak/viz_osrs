@@ -35,7 +35,7 @@ class QueryCreator extends React.Component {
 
   getQuery = () => {
     console.log(this.state.skills);
-    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' ORDER BY timestamp DESC LIMIT 1000`;
+    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' ORDER BY timestamp ASC LIMIT 500`;
   };
 
   updatePlayer = (player) => {
@@ -72,6 +72,7 @@ class QueryCreator extends React.Component {
         <GraphContainer
           skills={this.state.skills}
           data={this.state.queryResult}
+          category={this.state.category}
         ></GraphContainer>
       </div>
     );

@@ -63,8 +63,16 @@ class QuerySelector extends React.Component {
   };
 
   updateSkills = (skills) => {
-    this.setState({ skills: skills });
-    this.props.updateSkills(skills);
+    const updatedSkills = [];
+    if (skills) {
+      skills.forEach((skill) => {
+        if (skill.label !== undefined) {
+          updatedSkills.push(skill.value);
+        }
+      });
+    }
+    this.setState({ skills: updatedSkills });
+    this.props.updateSkills(updatedSkills);
   };
 
   render() {
