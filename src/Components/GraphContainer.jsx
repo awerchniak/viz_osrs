@@ -25,6 +25,33 @@ class GraphContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = initialState;
+
+    this.skillColorMap = new Map()
+    this.skillColorMap.set('Overall', '#000000')
+    this.skillColorMap.set('Overall', '#000000')
+    this.skillColorMap.set('Attack', '#E74C3C')
+    this.skillColorMap.set('Defence', '#5DADE2')
+    this.skillColorMap.set('Strength', '#OE6251')
+    this.skillColorMap.set('Hitpoints', '#641E16')
+    this.skillColorMap.set('Ranged', '#2ECC71')
+    this.skillColorMap.set('Prayer', '#F4D03F')
+    this.skillColorMap.set('Magic', '#99A3A4')
+    this.skillColorMap.set('Cooking', '#BB8FCE')
+    this.skillColorMap.set('Woodcutting', '#7E5109')
+    this.skillColorMap.set('Fletching', '#1ABC9C')
+    this.skillColorMap.set('Fishing', '#1B4F72')
+    this.skillColorMap.set('Firemaking', '#F39C12')
+    this.skillColorMap.set('Crafting', '#AF601A')
+    this.skillColorMap.set('Smithing', '#797D7F')
+    this.skillColorMap.set('Mining', '#65EDF1')
+    this.skillColorMap.set('Herblore', '#EFF165')
+    this.skillColorMap.set('Agility', '#4B0082')
+    this.skillColorMap.set('Thieving', '#4A235A')
+    this.skillColorMap.set('Slayer', '#17202A')
+    this.skillColorMap.set('Farming', '#A9DFBF')
+    this.skillColorMap.set('Runecrafting', '#E74C3C')
+    this.skillColorMap.set('Hunter', '#DC7633')
+    this.skillColorMap.set('Construction', '#E1C699')
   }
 
   getAxisYDomain = () => {
@@ -160,7 +187,7 @@ class GraphContainer extends React.Component {
           yAxisId="1"
           type="natural"
           dataKey={skill}
-          stroke="#8884d8"
+          stroke={this.skillColorMap.get(skill)}
           animationDuration={300}
           dot={false}
         />

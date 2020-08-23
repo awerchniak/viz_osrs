@@ -42,7 +42,7 @@ class QuerySelector extends React.Component {
       { value: "Thieving", label: "Thieving" },
       { value: "Slayer", label: "Slayer" },
       { value: "Farming", label: "Farming" },
-      { value: "Ruencrafting", label: "Ruencrafting" },
+      { value: "Runecrafting", label: "Runecrafting" },
       { value: "Hunter", label: "Hunter" },
       { value: "Construction", label: "Construction" },
     ];
