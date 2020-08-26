@@ -28,10 +28,9 @@ class GraphContainer extends React.Component {
 
     this.skillColorMap = new Map()
     this.skillColorMap.set('Overall', '#000000')
-    this.skillColorMap.set('Overall', '#000000')
     this.skillColorMap.set('Attack', '#E74C3C')
     this.skillColorMap.set('Defence', '#5DADE2')
-    this.skillColorMap.set('Strength', '#OE6251')
+    this.skillColorMap.set('Strength', '#808080')
     this.skillColorMap.set('Hitpoints', '#641E16')
     this.skillColorMap.set('Ranged', '#2ECC71')
     this.skillColorMap.set('Prayer', '#F4D03F')
@@ -66,6 +65,7 @@ class GraphContainer extends React.Component {
       case "level":
         bottom = 1;
         top = 99;
+        this.setState({ bottom, top });
         return [bottom, top];
       case "rank":
         bottom = -1;
