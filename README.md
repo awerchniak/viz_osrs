@@ -1,6 +1,33 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Old School RuneScape Stats Visualizer
+=====================================
+![OSRS Logo](./assetts/Old_School_RuneScape_logo.png)
 
-## Available Scripts
+https://www.osrs-stats-visualizer.net/
+
+This app provides a front-end web portal to the OSRSMetricsService where users can plot their stats over time.
+
+## Contributing
+Long-term, we'll start doing pull requests, but for now, when you push a commit, **_make sure to push to `dev`, and not `master`.**_ Pushing to `master` will build and deploy changes directly to our production endpoint.. so please
+don't :). Do like so:
+```
+$ git push origin dev
+```
+
+Commits to `master` should be considered a new release/minor version of the website. They should all be merged in
+from separate branches, like so:
+```
+$ git branch
+  dev
+* master
+$ git merge dev --squash -m "Release 0.1.1
+
+This is the absolute minimum viable product. We have a single web page
+where users can select Player,Table,Skill(s), as well as Start/End Date.
+The web page queries our database via our Lambda backend and plots the
+results to a simple table."
+```
+
+## React Scripts
 
 In the project directory, you can run:
 
@@ -36,33 +63,3 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
