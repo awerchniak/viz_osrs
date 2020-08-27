@@ -161,7 +161,19 @@ class GraphContainer extends React.Component {
       const newArray = [];
       this.props.data.forEach((dataPoint) => {
         const processedDataPoint = {};
-        processedDataPoint.timeStamp = dataPoint[0];
+
+        // Convert timestamp to local time and prettify
+        // TODO: break out into separate method
+        const timeStamp = new Date(dataPoint[0])
+        timeStamp.setHours(timeStamp.getHours() - timeStamp.getTimezoneOffset() / 60)
+        const formattedDate = timeStamp.toDateString()
+        const [, month, day, year] = formattedDate.split(' ')
+        const formattedTime = timeStamp.toTimeString()
+        const [time, , ] = formattedTime.split(' ')
+        const [hour, minute, second] = time.split(':')
+
+        processedDataPoint.timeStamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
+
         let index = 1;
         this.props.skills.forEach((skill) => {
           processedDataPoint[skill] = dataPoint[index];
