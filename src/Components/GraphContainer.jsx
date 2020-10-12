@@ -164,13 +164,13 @@ class GraphContainer extends React.Component {
 
         // Convert timestamp to local time and prettify
         // TODO: break out into separate method
-        const timeStamp = new Date(dataPoint[0])
-        timeStamp.setHours(timeStamp.getHours() - timeStamp.getTimezoneOffset() / 60)
-        const formattedDate = timeStamp.toDateString()
-        const [, month, day, year] = formattedDate.split(' ')
-        const formattedTime = timeStamp.toTimeString()
-        const [time, , ] = formattedTime.split(' ')
-        const [hour, minute, second] = time.split(':')
+        const timeStamp = new Date(Date.parse(dataPoint[0].replace(" ", "T")));
+        timeStamp.setHours(timeStamp.getHours() - timeStamp.getTimezoneOffset() / 60);
+        const formattedDate = timeStamp.toDateString();
+        const [, month, day, year] = formattedDate.split(' ');
+        const formattedTime = timeStamp.toTimeString();
+        const [time, , ] = formattedTime.split(' ');
+        const [hour, minute, second] = time.split(':');
 
         processedDataPoint.timeStamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
 
