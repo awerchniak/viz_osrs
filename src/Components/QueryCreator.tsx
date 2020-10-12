@@ -4,9 +4,24 @@ import { render } from "react-dom";
 import GraphContainer from "./GraphContainer";
 import QuerySelector from "./QuerySelector";
 
-class QueryCreator extends React.Component {
-  constructor() {
-    super();
+type QueryCreatorState = {
+  queryResult?: string[];
+  player: string | undefined;
+  category: string | undefined;
+  skills: string[];
+  startYear: string | undefined;
+  startMonth: string | undefined;
+  startDay: string | undefined;
+  endYear: string | undefined;
+  endMonth: string | undefined;
+  endDay: string | undefined;
+};
+
+class QueryCreator extends React.Component<never, QueryCreatorState> {
+  defaultDisplayedDataPoints: number = 1000;
+
+  constructor(props: never) {
+    super(props);
     this.state = {
       queryResult: undefined,
       player: "ElderPlinius",
@@ -19,45 +34,46 @@ class QueryCreator extends React.Component {
       endMonth: "August",
       endDay: "27",
     };
-
-    this.defaultDisplayedDataPoints = 1000;
   }
 
-  fetchData = async () => {
-    if (
-        !this.state.skills ||
-        !this.state.player ||
-        !this.state.category ||
-        !this.state.startYear ||
-        !this.state.startMonth ||
-        !this.state.startDay ||
-        !this.state.endYear ||
-        !this.state.endMonth ||
-        !this.state.endDay
-    ) {
-      return undefined;
-    }
-    var url = new URL(
-      "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
+  infoPopulated = (): boolean => {
+    return (
+      !!this.state.skills &&
+      !!this.state.player &&
+      !!this.state.category &&
+      !!this.state.startYear &&
+      !!this.state.startMonth &&
+      !!this.state.startDay &&
+      !!this.state.endYear &&
+      !!this.state.endMonth &&
+      !!this.state.endDay
     );
-    const query = this.getQuery();
-    url.searchParams.append("sql", this.getQuery());
+  };
 
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      const smoothedData = this.smooth(data);
-      this.setState({ queryResult: smoothedData });
-    } catch (error) {
-      throw error;
+  fetchData = async (): Promise<void> => {
+    if (!this.infoPopulated()) {
+      this.setState({ queryResult: undefined });
     }
+    const url: URL = new URL(
+      "https://fakeLambda"
+    );
+
+    url.searchParams.append("sql", this.getQuery());
+    const res: Response = await fetch(url.toString());
+    if (!res.ok) {
+      throw Error(`Invalid response: ${res.statusText}`);
+    }
+
+    const data: string = await res.text();
+    const smoothedData: string[] = this.smooth(data);
+    this.setState({ queryResult: smoothedData });
   };
 
   // not a real smooth, more of a thin
-  smooth = (data) => {
+  smooth = (data: string): string[] => {
     if (!Array.isArray(data)) {
       // not our problem
-      return data;
+      throw Error("Invalid response object; check query format.");
     }
 
     const smoothedData = [];
@@ -71,7 +87,7 @@ class QueryCreator extends React.Component {
     return smoothedData;
   };
 
-  getQuery = () => {
+  getQuery = (): string => {
     return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' AND timestamp > '${this.state.startYear}-${this.state.startMonth}-${this.state.startDay} 00:00:00' AND timestamp < '${this.state.endYear}-${this.state.endMonth}-${this.state.endDay} 23:59:59' ORDER BY timestamp ASC`;
   };
 
@@ -128,6 +144,7 @@ class QueryCreator extends React.Component {
   }
 
   componentDidUpdate() {
+    qu;
     /**
      * N.B. (trdav):
      * Never remove this queryResult check, or we will get an infinite loop

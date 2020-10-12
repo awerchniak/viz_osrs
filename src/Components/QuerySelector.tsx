@@ -1,8 +1,15 @@
 import React from "react";
 import Select from "react-select";
+import { Category, Player, Skills } from "./Interfaces/DropDownDataFields";
 
-class QuerySelector extends React.Component {
-  constructor(props) {
+type QuerySelectorState = {
+  player: Player;
+  category: Category;
+  skills: Skills;
+};
+
+class QuerySelector extends React.Component<never, QuerySelectorState> {
+  constructor(props: never) {
     super(props);
     this.state = {
       player: { label: "ElderPlinius", value: "ElderPlinius" },
@@ -52,9 +59,7 @@ class QuerySelector extends React.Component {
       { value: "Hunter", label: "Hunter" },
       { value: "Construction", label: "Construction" },
     ];
-    this.yearOptions = [
-      { value: "2020", label: "2020" },
-    ]
+    this.yearOptions = [{ value: "2020", label: "2020" }];
     this.monthOptions = [
       { value: "01", label: "January" },
       { value: "02", label: "February" },
@@ -68,7 +73,7 @@ class QuerySelector extends React.Component {
       { value: "10", label: "October" },
       { value: "11", label: "November" },
       { value: "12", label: "December" },
-    ]
+    ];
     this.dayOptions = [
       { value: "01", label: "01" },
       { value: "02", label: "02" },
@@ -101,7 +106,7 @@ class QuerySelector extends React.Component {
       { value: "29", label: "29" },
       { value: "30", label: "30" },
       { value: "31", label: "31" },
-    ]
+    ];
   }
 
   updatePlayer = (player) => {
@@ -203,7 +208,7 @@ class QuerySelector extends React.Component {
           />
         </div>
         <div>
-        <span>Select Start Day for query</span>
+          <span>Select Start Day for query</span>
           <Select
             placeholder="StartDay"
             value={this.state.startDay}

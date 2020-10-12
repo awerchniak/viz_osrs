@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import QueryCreator from "./Components/QueryCreator";
 
-class App extends React.Component {
+class App extends React.Component<any, any> {
   render() {
     return (
       <div className="App">
