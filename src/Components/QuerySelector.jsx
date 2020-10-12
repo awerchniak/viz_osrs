@@ -4,28 +4,6 @@ import Select from "react-select";
 class QuerySelector extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      player: { label: "ElderPlinius", value: "ElderPlinius" },
-      category: { label: "experience", value: "experience" },
-      skills: [{ label: "Mining", value: "Mining" }],
-      startYear: { label: "2020", value: "2020" },
-      startMonth: { label: "August", value: "08" },
-      startDay: { label: "20", value: "20" },
-      endYear: { label: "2020", value: "2020" },
-      endMonth: { label: "August", value: "08" },
-      endDay: { label: "27", value: "27" },
-    };
-
-    this.playerOptions = [
-      { value: "ElderPlinius", label: "ElderPlinius" },
-      { value: "Tarvis Devor", label: "Tarvis Devor" },
-      { value: "Brec", label: "Brec" },
-    ];
-    this.categoryOptions = [
-      { value: "rank", label: "Rank" },
-      { value: "level", label: "Level" },
-      { value: "experience", label: "Experience" },
-    ];
     this.skillsOptions = [
       { value: "Overall", label: "Overall" },
       { value: "Attack", label: "Attack" },
@@ -51,6 +29,28 @@ class QuerySelector extends React.Component {
       { value: "Runecrafting", label: "Runecrafting" },
       { value: "Hunter", label: "Hunter" },
       { value: "Construction", label: "Construction" },
+    ];
+    this.state = {
+      player: { label: "ElderPlinius", value: "ElderPlinius" },
+      category: { label: "experience", value: "experience" },
+      skills: this.skillsOptions,
+      startYear: { label: "2020", value: "2020" },
+      startMonth: { label: "August", value: "08" },
+      startDay: { label: "20", value: "20" },
+      endYear: { label: "2020", value: "2020" },
+      endMonth: { label: "August", value: "08" },
+      endDay: { label: "27", value: "27" },
+    };
+
+    this.playerOptions = [
+      { value: "ElderPlinius", label: "ElderPlinius" },
+      { value: "Tarvis Devor", label: "Tarvis Devor" },
+      { value: "Brec", label: "Brec" },
+    ];
+    this.categoryOptions = [
+      { value: "rank", label: "Rank" },
+      { value: "level", label: "Level" },
+      { value: "experience", label: "Experience" },
     ];
     this.yearOptions = [
       { value: "2020", label: "2020" },
