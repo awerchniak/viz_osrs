@@ -46,6 +46,7 @@ class QuerySelector extends React.Component {
       { value: "ElderPlinius", label: "ElderPlinius" },
       { value: "Tarvis Devor", label: "Tarvis Devor" },
       { value: "Brec", label: "Brec" },
+      { value: "Dethaele", label: "Dethaele"},
     ];
     this.categoryOptions = [
       { value: "rank", label: "Rank" },
