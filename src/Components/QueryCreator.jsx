@@ -54,7 +54,7 @@ class QueryCreator extends React.Component {
     var url = new URL(
       "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
     );
-    const query = this.getQuery();
+    
     url.searchParams.append("sql", this.getQuery());
 
     try {
