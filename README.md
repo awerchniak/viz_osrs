@@ -19,7 +19,10 @@ from separate branches, like so:
 $ git branch
   dev
 * master
-$ git merge dev --squash -m "Release 0.1.1
+$ git merge dev --squash
+Squash commit -- not updating HEAD
+Automatic merge went well; stopped before committing as requested
+$ git commit -m "Release 0.1.1
 
 This is the absolute minimum viable product. We have a single web page
 where users can select Player,Table,Skill(s), as well as Start/End Date.
