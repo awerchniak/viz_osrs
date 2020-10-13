@@ -1,9 +1,24 @@
 import React from "react";
 import Select from "react-select";
 
+
+import moment from 'moment';
+
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import 'bootstrap/scss/bootstrap.scss'; // for better fonts and form styles to demo with
+
+import { DateRangePicker } from 'react-dates';
+
 class QuerySelector extends React.Component {
   constructor(props) {
     super(props);
+    this.BLOCKED_DATES = [
+      moment().add(10, 'days'), 
+      moment().add(11, 'days'),
+      moment().add(12, 'days'), 
+    ];
+
     this.state = {
       player: { label: "ElderPlinius", value: "ElderPlinius" },
       category: { label: "experience", value: "experience" },
@@ -14,6 +29,12 @@ class QuerySelector extends React.Component {
       endYear: { label: "2020", value: "2020" },
       endMonth: { label: "August", value: "08" },
       endDay: { label: "27", value: "27" },
+      focusedInput: null,
+      startDate: moment().subtract(7, 'days'),
+      endDate: moment(),
+      block: false,
+      numMonths: 2,
+      minimumNights: 7
     };
 
     this.playerOptions = [
@@ -103,6 +124,31 @@ class QuerySelector extends React.Component {
       { value: "31", label: "31" },
     ]
   }
+  
+  /**
+   * START:
+   * 
+   * Highly experimental section
+   */
+
+  handleDatesChange = ({ startDate, endDate }) => {
+    this.setState({ startDate, endDate });
+    this.props.updateDates(startDate, endDate);
+  }
+
+  handleFocusChange = (focusedInput) => {
+    this.setState({ focusedInput });
+  }
+
+  handleIsOutsideRange = (day) => {
+    return day.isBefore('2020-8-15') || day.isAfter(moment());
+  }
+
+   /**
+   * END:
+   * 
+   * Highly experimental section
+   */
 
   updatePlayer = (player) => {
     this.setState({ player: player });
@@ -121,36 +167,6 @@ class QuerySelector extends React.Component {
       };
     });
     this.props.updateSkills(skills);
-  };
-
-  updateStartYear = (startYear) => {
-    this.setState({ startYear: startYear });
-    this.props.updateStartYear(startYear);
-  };
-
-  updateStartMonth = (startMonth) => {
-    this.setState({ startMonth: startMonth });
-    this.props.updateStartMonth(startMonth);
-  };
-
-  updateStartDay = (startDay) => {
-    this.setState({ startDay: startDay });
-    this.props.updateStartDay(startDay);
-  };
-
-  updateEndYear = (endYear) => {
-    this.setState({ endYear: endYear });
-    this.props.updateEndYear(endYear);
-  };
-
-  updateEndMonth = (endMonth) => {
-    this.setState({ endMonth: endMonth });
-    this.props.updateEndMonth(endMonth);
-  };
-
-  updateEndDay = (endDay) => {
-    this.setState({ endDay: endDay });
-    this.props.updateEndDay(endDay);
   };
 
   render() {
@@ -184,58 +200,21 @@ class QuerySelector extends React.Component {
             isMulti={true}
           />
         </div>
-        <div>
-          <span>Select Start Year for query</span>
-          <Select
-            placeholder="StartYear"
-            value={this.state.startYear}
-            onChange={this.updateStartYear}
-            options={this.yearOptions}
-          />
-        </div>
-        <div>
-          <span>Select Start Month for query</span>
-          <Select
-            placeholder="StartMonth"
-            value={this.state.startMonth}
-            onChange={this.updateStartMonth}
-            options={this.monthOptions}
-          />
-        </div>
-        <div>
-        <span>Select Start Day for query</span>
-          <Select
-            placeholder="StartDay"
-            value={this.state.startDay}
-            onChange={this.updateStartDay}
-            options={this.dayOptions}
-          />
-        </div>
-        <div>
-          <span>Select End Year for query</span>
-          <Select
-            placeholder="EndYear"
-            value={this.state.endYear}
-            onChange={this.updateEndYear}
-            options={this.yearOptions}
-          />
-        </div>
-        <div>
-          <span>Select End Month for query</span>
-          <Select
-            placeholder="EndMonth"
-            value={this.state.endMonth}
-            onChange={this.updateEndMonth}
-            options={this.monthOptions}
-          />
-        </div>
-        <div>
-          <span>Select End Day for query</span>
-          <Select
-            placeholder="EndDay"
-            value={this.state.endDay}
-            onChange={this.updateEndDay}
-            options={this.dayOptions}
+        <div style={{ marginTop: '15px', marginBottom: '15px'}}>
+          <DateRangePicker
+            startDate={this.state.startDate} // momentPropTypes.momentObj or null,
+            startDateId="unique_start_date_id" // PropTypes.string.isRequired,
+            endDate={this.state.endDate} // momentPropTypes.momentObj or null,
+            endDateId="unique_end_date_id" // PropTypes.string.isRequired,
+            onDatesChange={this.handleDatesChange} // PropTypes.func.isRequired,
+            focusedInput={this.state.focusedInput} // PropTypes.oneOf([START_DATE, END_DATE]) or null,
+            onFocusChange={this.handleFocusChange} // PropTypes.func.isRequired,
+            displayFormat={'MM/DD/YYYY'}
+            hideKeyboardShortcutsPanel={true}
+            numberOfMonths={this.state.numMonths || 2}
+            block={this.state.block}
+            isOutsideRange={this.handleIsOutsideRange}
+            initialVisibleMonth={() => moment().subtract(1, 'months')}
           />
         </div>
       </div>

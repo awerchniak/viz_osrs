@@ -1,8 +1,8 @@
 import React from "react";
 import "../App.css";
-import { render } from "react-dom";
 import GraphContainer from "./GraphContainer";
 import QuerySelector from "./QuerySelector";
+import moment from 'moment';
 
 class QueryCreator extends React.Component {
   constructor() {
@@ -18,25 +18,14 @@ class QueryCreator extends React.Component {
       endYear: "2020",
       endMonth: "August",
       endDay: "27",
+      formattedStartDate: this.formatISODate(moment().subtract(7, 'days').format()),
+      formattedEndDate: this.formatISODate(moment().format()),
     };
 
     this.defaultDisplayedDataPoints = 1000;
   }
 
   fetchData = async () => {
-    if (
-        !this.state.skills ||
-        !this.state.player ||
-        !this.state.category ||
-        !this.state.startYear ||
-        !this.state.startMonth ||
-        !this.state.startDay ||
-        !this.state.endYear ||
-        !this.state.endMonth ||
-        !this.state.endDay
-    ) {
-      return undefined;
-    }
     var url = new URL(
       "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
     );
@@ -72,7 +61,7 @@ class QueryCreator extends React.Component {
   };
 
   getQuery = () => {
-    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' AND timestamp > '${this.state.startYear}-${this.state.startMonth}-${this.state.startDay} 00:00:00' AND timestamp < '${this.state.endYear}-${this.state.endMonth}-${this.state.endDay} 23:59:59' ORDER BY timestamp ASC`;
+    return `SELECT timestamp,${this.state.skills} FROM skills.${this.state.category} WHERE player='${this.state.player}' AND timestamp > '${this.state.formattedStartDate} 00:00:00' AND timestamp < '${this.state.formattedEndDate} 23:59:59' ORDER BY timestamp ASC`;
   };
 
   updatePlayer = (player) => {
@@ -99,29 +88,16 @@ class QueryCreator extends React.Component {
     this.setState({ skills: updatedSkills }, () => this.fetchData());
   };
 
-  updateStartYear = (startYear) => {
-    this.setState({ startYear: startYear.value }, () => this.fetchData());
-  };
+  updateDates = (startDate, endDate) => {
 
-  updateStartMonth = (startMonth) => {
-    this.setState({ startMonth: startMonth.value }, () => this.fetchData());
-  };
+    const formattedStartDate = this.formatISODate(startDate.format());
+    const formattedEndDate = this.formatISODate(endDate.format());
+    this.setState({formattedStartDate, formattedEndDate});
+  }
 
-  updateStartDay = (startDay) => {
-    this.setState({ startDay: startDay.value }, () => this.fetchData());
-  };
-
-  updateEndYear = (endYear) => {
-    this.setState({ endYear: endYear.value }, () => this.fetchData());
-  };
-
-  updateEndMonth = (endMonth) => {
-    this.setState({ endMonth: endMonth.value }, () => this.fetchData());
-  };
-
-  updateEndDay = (endDay) => {
-    this.setState({ endDay: endDay.value }, () => this.fetchData());
-  };
+  formatISODate(date) {
+    return date.slice(0, 10);
+  }
 
   componentDidMount() {
     this.fetchData();
@@ -144,12 +120,7 @@ class QueryCreator extends React.Component {
           updatePlayer={this.updatePlayer}
           updateCategory={this.updateCategory}
           updateSkills={this.updateSkills}
-          updateStartYear={this.updateStartYear}
-          updateStartMonth={this.updateStartMonth}
-          updateStartDay={this.updateStartDay}
-          updateEndYear={this.updateEndYear}
-          updateEndMonth={this.updateEndMonth}
-          updateEndDay={this.updateEndDay}
+          updateDates={this.updateDates}
         ></QuerySelector>
         <button onClick={this.fetchData}>Refresh</button>
         <GraphContainer
