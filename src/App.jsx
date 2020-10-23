@@ -5,7 +5,8 @@ import QueryCreator from "./Components/QueryCreator";
 class App extends React.Component {
   render() {
     return (
-      <div className="App">
+      <div className="App" style={{ dislpay: "flex", flexDirection: "column", alignItems: "center"}}>
+        <h1 style={{ marginBottom: "60px" }}> Old School Runescape Stats Visualizer</h1>
         <QueryCreator></QueryCreator>
         <a
           className="App-link"

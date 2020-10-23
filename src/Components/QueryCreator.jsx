@@ -141,6 +141,12 @@ class QueryCreator extends React.Component {
   render() {
     return (
       <div>
+        <GraphContainer
+          skills={this.state.skills}
+          data={this.state.queryResult}
+          category={this.state.category}
+          user={this.state.user}
+        ></GraphContainer>
         <QuerySelector
           updatePlayer={this.updatePlayer}
           updateCategory={this.updateCategory}
@@ -148,12 +154,6 @@ class QueryCreator extends React.Component {
           updateDates={this.updateDates}
         ></QuerySelector>
         <button onClick={this.fetchData}>Refresh</button>
-        <GraphContainer
-          skills={this.state.skills}
-          data={this.state.queryResult}
-          category={this.state.category}
-          user={this.state.user}
-        ></GraphContainer>
       </div>
     );
   }

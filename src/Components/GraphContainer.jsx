@@ -138,20 +138,6 @@ class GraphContainer extends React.Component {
     }));
   }
 
-  zoomOut() {
-    let { data } = this.state;
-
-    this.setState(() => ({
-      data: data.slice(),
-      refAreaLeft: "",
-      refAreaRight: "",
-      left: "dataMin",
-      right: "dataMax",
-      top: "dataMax+1",
-      bottom: "dataMin",
-    }));
-  }
-
   formatData = () => {
     if (
       this.props.data &&
@@ -239,10 +225,7 @@ class GraphContainer extends React.Component {
     } = this.state;
 
     return (
-      <div className="highlight-bar-charts" style={{ userSelect: "none" }}>
-        <button className="btn update" onClick={this.zoomOut.bind(this)}>
-          Zoom Out
-        </button>
+      <div className="highlight-bar-charts" style={{ userSelect: "none", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
         <LineChart
           width={800}
