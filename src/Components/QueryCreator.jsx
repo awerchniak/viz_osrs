@@ -140,20 +140,24 @@ class QueryCreator extends React.Component {
 
   render() {
     return (
-      <div>
-        <GraphContainer
-          skills={this.state.skills}
-          data={this.state.queryResult}
-          category={this.state.category}
-          user={this.state.user}
-        ></GraphContainer>
-        <QuerySelector
-          updatePlayer={this.updatePlayer}
-          updateCategory={this.updateCategory}
-          updateSkills={this.updateSkills}
-          updateDates={this.updateDates}
-        ></QuerySelector>
-        <button onClick={this.fetchData}>Refresh</button>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 3fr"}}>
+        <div style={{ gridColumn: "1 / 2" }}>
+          <QuerySelector
+            updatePlayer={this.updatePlayer}
+            updateCategory={this.updateCategory}
+            updateSkills={this.updateSkills}
+            updateDates={this.updateDates}
+          ></QuerySelector>
+        </div>
+        <div style={{ gridColumn: "2 / 3", padding: "15px" }}>
+          <GraphContainer
+            skills={this.state.skills}
+            data={this.state.queryResult}
+            category={this.state.category}
+            user={this.state.user}
+          ></GraphContainer>
+          <button style={{ margin: "40px"}} onClick={this.fetchData}>Refresh</button>
+        </div>
       </div>
     );
   }

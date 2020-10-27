@@ -6,16 +6,13 @@ import {
   CartesianGrid,
   XAxis,
   YAxis,
-  Tooltip,
-  ReferenceArea,
+  Tooltip
 } from "recharts";
 
 const initialState = {
   data: [{ timeStamp: 0, Magic: 0 }],
   left: "dataMin",
   right: "dataMax",
-  refAreaLeft: "",
-  refAreaRight: "",
   top: "dataMax+1000000",
   bottom: "dataMin-1000000",
   animation: true,
@@ -109,35 +106,6 @@ class GraphContainer extends React.Component {
     return [min, max];
   }
 
-  zoom() {
-    let { refAreaLeft, refAreaRight, data } = this.state;
-
-    if (refAreaLeft === refAreaRight || refAreaRight === "") {
-      this.setState(() => ({
-        refAreaLeft: "",
-        refAreaRight: "",
-      }));
-      return;
-    }
-
-    // xAxis domain
-    if (refAreaLeft > refAreaRight)
-      [refAreaLeft, refAreaRight] = [refAreaRight, refAreaLeft];
-
-    // yAxis domain
-    const [bottom, top] = this.getAxisYDomain();
-
-    this.setState(() => ({
-      refAreaLeft: "",
-      refAreaRight: "",
-      data: data.slice(),
-      left: refAreaLeft,
-      right: refAreaRight,
-      bottom,
-      top,
-    }));
-  }
-
   formatData = () => {
     if (
       this.props.data &&
@@ -158,8 +126,9 @@ class GraphContainer extends React.Component {
         const [time, , ] = formattedTime.split(' ');
         const [hour, minute, second] = time.split(':');
 
-        processedDataPoint.timeStamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
-
+        // processedDataPoint.timeStamp = `${day}-${month}-${year} ${hour}:${minute}:${second}`;
+        processedDataPoint.timeStamp = `${month} ${day}`;
+        
         let index = 1;
         this.props.skills.forEach((skill) => {
           processedDataPoint[skill] = dataPoint[index];
@@ -218,50 +187,34 @@ class GraphContainer extends React.Component {
       data,
       left,
       right,
-      refAreaLeft,
-      refAreaRight,
       top,
       bottom,
     } = this.state;
 
     return (
       <div className="highlight-bar-charts" style={{ userSelect: "none", display: "flex", flexDirection: "column", alignItems: "center" }}>
-
         <LineChart
           width={800}
           height={400}
           data={data}
-          onMouseDown={(e) => this.setState({ refAreaLeft: e.activeLabel })}
-          onMouseMove={(e) =>
-            this.state.refAreaLeft &&
-            this.setState({ refAreaRight: e.activeLabel })
-          }
-          onMouseUp={this.zoom.bind(this)}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
-            allowDataOverflow
+            allowDataOverflow={true}
             dataKey="timeStamp"
             domain={[left, right]}
             type="category"
           />
           <YAxis
-            allowDataOverflow
-            domain={[bottom, top]}
+            allowDataOverflow={true}
+            domain={["0", top]}
             type="number"
             yAxisId="1"
+            scale="log"
+            width={100}
           />
           <Tooltip />
           {this.getLines()}
-
-          {refAreaLeft && refAreaRight ? (
-            <ReferenceArea
-              yAxisId="1"
-              x1={refAreaLeft}
-              x2={refAreaRight}
-              strokeOpacity={0.3}
-            />
-          ) : null}
         </LineChart>
       </div>
     );

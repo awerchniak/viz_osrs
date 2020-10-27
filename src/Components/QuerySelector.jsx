@@ -16,7 +16,7 @@ class QuerySelector extends React.Component {
 
     this.state = {
       player: { label: "ElderPlinius", value: "ElderPlinius" },
-      category: { label: "experience", value: "experience" },
+      category: { label: "Experience", value: "experience" },
       skills: [
         { value: "Overall", label: "Overall" },
         { value: "Attack", label: "Attack" },
@@ -136,8 +136,8 @@ class QuerySelector extends React.Component {
 
   render() {
     return (
-      <div>
-        <div>
+      <div style={{ maxHeight: "600px", overflowY: "scroll"}}>
+        <div style={{ margin: "30px", marginTop: "0px"}}>
           <span>Select Username</span>
           <Select
             placeholder="Player"
@@ -146,7 +146,7 @@ class QuerySelector extends React.Component {
             options={this.playerOptions}
           />
         </div>
-        <div>
+        <div style={{ margin: "30px"}}>
           <span>Select Table</span>
           <Select
             placeholder="Category"
@@ -155,7 +155,7 @@ class QuerySelector extends React.Component {
             options={this.categoryOptions}
           />
         </div>
-        <div>
+        <div style={{ margin: "30px"}}>
           <span>Select Skill(s)</span>
           <Select
             placeholder="Skills"
