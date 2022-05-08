@@ -12,7 +12,6 @@ class QueryCreator extends React.Component {
       player: "ElderPlinius",
       category: "experience",
       skills: [
-          "Overall",
           "Attack",
           "Defence",
           "Strength",
