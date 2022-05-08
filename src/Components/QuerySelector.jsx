@@ -53,9 +53,9 @@ class QuerySelector extends React.Component {
 
     this.playerOptions = [
       { value: "ElderPlinius", label: "ElderPlinius" },
-      { value: "Tarvis Devor", label: "Tarvis Devor" },
       { value: "Brec", label: "Brec" },
-      { value: "Dethaele", label: "Dethaele" },
+      { value: "IronDethaele", label: "IronDethaele" },
+      { value: "IronPlinius", label: "IronPlinius" },
     ];
     this.categoryOptions = [
       { value: "rank", label: "Rank" },
