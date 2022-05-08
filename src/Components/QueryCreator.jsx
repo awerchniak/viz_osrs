@@ -52,7 +52,7 @@ class QueryCreator extends React.Component {
 
   fetchData = async () => {
     var url = new URL(
-      "https://ti2bowg785.execute-api.us-east-1.amazonaws.com/default/QueryOsrsMetricsDbLambda"
+      "https://ee7wrcqwva.execute-api.us-east-1.amazonaws.com/prod/legacy"
     );
     
     url.searchParams.append("sql", this.getQuery());
