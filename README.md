@@ -4,7 +4,7 @@ Old School RuneScape Stats Visualizer
 
 https://www.osrs-stats-visualizer.net/
 
-This app provides a front-end web portal to the OSRSMetricsService where users can plot their stats over time.
+This app provides a front-end web portal to the ~~OSRSMetricsService~~ [CDK Hiscores Tracker](https://github.com/awerchniak/cdk-hiscores-tracker) where users can plot their stats over time.
 
 ## Contributing
 Long-term, we'll start doing pull requests, but for now, when you push a commit, **_make sure to push to `dev`, and not `master`.**_ Pushing to `master` will build and deploy changes directly to our production endpoint.. so please
